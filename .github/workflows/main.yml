@@ -39,7 +39,16 @@ jobs:
         pip install pycodestyle
         pip install -r ./backend/requirements.txt
 
-    - name: Lint with ruff, format check and pycodestyle
+    - name: Ruff (lint)
+      run: python -m ruff check backend/
+
+    - name: Ruff (format)
+      run: python -m ruff format backend/
+
+    - name: Pycodestyle
+      run: pycodestyle backend/
+
+    - name: Run Django tests
       env:
         POSTGRES_USER: django_user
         POSTGRES_PASSWORD: django_password
@@ -47,9 +56,6 @@ jobs:
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
       run: |
-        python -m ruff check backend/
-        python -m ruff format --check backend/
-        pycodestyle backend/
         cd backend/
         python manage.py test
 
